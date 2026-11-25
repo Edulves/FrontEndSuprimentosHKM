@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getToken, sair } from './auth';
 import type {
   Etapa,
   FiltroResumo,
@@ -16,6 +17,20 @@ const suprimentosApi = axios.create({
   baseURL: '/suprimentos',
   headers: { 'Content-Type': 'application/json' },
 });
+
+// Envia o token de login e volta para a tela de login se ele expirar.
+suprimentosApi.interceptors.request.use((config) => {
+  const token = getToken();
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+suprimentosApi.interceptors.response.use(
+  (r) => r,
+  (erro) => {
+    if (erro?.response?.status === 401) sair();
+    return Promise.reject(erro);
+  }
+);
 
 export type Tabela = Etapa;
 

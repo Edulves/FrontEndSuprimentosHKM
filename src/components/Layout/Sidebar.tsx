@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { getUsuario, sair } from '../../services/auth';
 
 const ItemMenu: React.FC<{ para: string; icone: string; rotulo: string }> = ({ para, icone, rotulo }) => (
   <NavLink
@@ -65,8 +66,22 @@ const Sidebar: React.FC = () => {
         </nav>
       </div>
 
-      {/* Rodapé do Sidebar (se necessário) */}
-      <div className="p-3 bg-surface-container-low"></div>
+      {/* Rodapé: usuário logado e sair */}
+      <div className="p-3 bg-surface-container-low flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0 text-on-surface-variant">
+          <span className="material-symbols-outlined text-[20px]">account_circle</span>
+          <span className="font-title-sm text-title-sm truncate">{getUsuario()}</span>
+        </div>
+        <button
+          type="button"
+          onClick={sair}
+          title="Sair"
+          className="flex items-center gap-1 px-2 py-1 rounded text-on-surface-variant hover:bg-surface-container font-label-md text-label-md"
+        >
+          <span className="material-symbols-outlined text-[18px]">logout</span>
+          Sair
+        </button>
+      </div>
     </aside>
   );
 };

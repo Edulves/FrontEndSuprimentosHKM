@@ -1,11 +1,14 @@
 import axios from 'axios';
 import type {
+  Etapa,
   FiltroResumo,
   Pagina,
   ResumoCompras,
   ResumoCotacoes,
   ResumoOrdens,
   ResumoSolicitacoes,
+  Rastreio,
+  Vinculos,
 } from '../types/suprimentos';
 
 // API Python (backendpython) — proxy '/suprimentos' configurado no vite.config.ts
@@ -14,7 +17,7 @@ const suprimentosApi = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-export type Tabela = 'solicitacoes' | 'cotacoes' | 'ordens_de_compras' | 'compras';
+export type Tabela = Etapa;
 
 type Params = Record<string, string | number | boolean | undefined | null>;
 
@@ -49,6 +52,19 @@ export const getEmpresas = (): Promise<number[]> => {
 
 export const listar = async <T>(tabela: Tabela, params: Params): Promise<Pagina<T>> => {
   const { data } = await suprimentosApi.get<Pagina<T>>(`/${tabela}`, { params: limpar(params) });
+  return data;
+};
+
+/** Cadeia solicitação → cotação → OC → compra ligada a um número. */
+export const getRastreio = async (etapa: Etapa, numero: number, cod_empresa?: number | null): Promise<Rastreio> => {
+  const { data } = await suprimentosApi.get<Rastreio>('/rastreio', { params: limpar({ etapa, numero, cod_empresa }) });
+  return data;
+};
+
+/** Números das etapas anterior e seguinte de cada linha (guid_linha). */
+export const getVinculos = async (etapa: Etapa, guids: string[]): Promise<Vinculos> => {
+  if (!guids.length) return {};
+  const { data } = await suprimentosApi.get<Vinculos>('/rastreio/vinculos', { params: { etapa, guids: guids.join(',') } });
   return data;
 };
 

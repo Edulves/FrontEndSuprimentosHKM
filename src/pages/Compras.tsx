@@ -4,6 +4,7 @@ import type { Compra } from '../types/suprimentos';
 import { fmtCompacto, fmtData, fmtDec1, fmtInt, fmtMoeda, fmtMoedaCompacta, fmtNum } from '../utils/format';
 import { AreaMensal, BarrasRanking, ColunasMensais, SERIE } from '../components/dashboard/Charts';
 import TabelaRegistros, { type Coluna } from '../components/dashboard/TabelaRegistros';
+import { PainelRastreio } from '../components/dashboard/Rastreio';
 import {
   CartaoGrafico,
   Carregando,
@@ -145,6 +146,8 @@ const Compras: React.FC = () => {
           </div>
         )
       )}
+
+      <PainelRastreio etapaAtual="compras" />
 
       <TabelaRegistros<Compra>
         tabela="compras"

@@ -4,6 +4,7 @@ import type { OrdemCompra } from '../types/suprimentos';
 import { fmtCompacto, fmtData, fmtInt, fmtMoeda, fmtMoedaCompacta, fmtNum, fmtPct } from '../utils/format';
 import { AreaMensal, BarraComposicao, BarrasRanking, ColunasMensais, SERIE } from '../components/dashboard/Charts';
 import TabelaRegistros, { type Coluna } from '../components/dashboard/TabelaRegistros';
+import { PainelRastreio } from '../components/dashboard/Rastreio';
 import {
   CartaoGrafico,
   Carregando,
@@ -197,6 +198,8 @@ const OrdensCompra: React.FC = () => {
           </div>
         )
       )}
+
+      <PainelRastreio etapaAtual="ordens_de_compras" />
 
       <TabelaRegistros<OrdemCompra>
         tabela="ordens_de_compras"

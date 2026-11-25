@@ -173,3 +173,20 @@ export interface ResumoCompras {
   top_produtos: { nome: string; valor: number; itens: number }[];
   por_usuario: { nome: string; itens: number; valor: number }[];
 }
+
+// ---------- Rastreio (solicitação → cotação → OC → compra) ----------
+export type Etapa = 'solicitacoes' | 'cotacoes' | 'ordens_de_compras' | 'compras';
+
+export interface NumeroEtapa {
+  numero: number;
+  cod_empresa: number;
+  itens?: number;
+}
+
+export interface Rastreio {
+  origem: { etapa: Etapa; numero: number; cod_empresa: number | null };
+  encontrado: boolean;
+  etapas: Record<Etapa, { itens: number; numeros: NumeroEtapa[] }>;
+}
+
+export type Vinculos = Record<string, { anterior: NumeroEtapa[]; proxima: NumeroEtapa[] }>;

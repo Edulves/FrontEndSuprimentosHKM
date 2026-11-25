@@ -4,6 +4,7 @@ import type { Cotacao } from '../types/suprimentos';
 import { fmtCompacto, fmtData, fmtDec1, fmtInt, fmtNum, fmtPct } from '../utils/format';
 import { BarraComposicao, BarrasRanking, ColunasMensais, Legenda, SERIE, type Serie } from '../components/dashboard/Charts';
 import TabelaRegistros, { type Coluna } from '../components/dashboard/TabelaRegistros';
+import { PainelRastreio } from '../components/dashboard/Rastreio';
 import {
   CartaoGrafico,
   Carregando,
@@ -161,6 +162,8 @@ const Cotacoes: React.FC = () => {
           </div>
         )
       )}
+
+      <PainelRastreio etapaAtual="cotacoes" />
 
       <TabelaRegistros<Cotacao>
         tabela="cotacoes"

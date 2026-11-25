@@ -9,11 +9,11 @@ const HeaderBanner: React.FC = () => {
             <span className="material-symbols-outlined text-[15px]" style={{ fontVariationSettings: '"FILL" 1' }}>
               hub
             </span>
-            Mapeamento De-Para ERP
+            Histórico de Negociações
           </span>
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm">
             <span className="h-2 w-2 rounded-full bg-tertiary"></span>
-            API v1 Ativa
+            API Python
           </span>
         </div>
 
@@ -22,18 +22,18 @@ const HeaderBanner: React.FC = () => {
         </h1>
 
         <p className="font-body-md text-body-md text-secondary leading-relaxed">
-          Consulte pelo Código Interno do Produto (
+          Pesquise um produto pelo código interno, nome ou{' '}
           <code className="text-on-surface font-semibold bg-surface-container-low px-1.5 py-0.5 rounded">
-            codInternoDoProduto
-          </code>
-          ) para mapear parceiros homologados, auditar catálogos fornecedor-específicos e disparar cotações simultâneas.
+            cod_produto
+          </code>{' '}
+          e veja todos os fornecedores que já participaram de negociações dele, para direcionar novas cotações.
         </p>
       </div>
 
       {/* Quick Actions */}
       <div className="flex flex-wrap items-center gap-2 self-start lg:self-center">
         <span className="font-mono text-[12px] text-secondary bg-surface-container-low px-3 py-1.5 rounded border border-surface-container-high">
-          GET /FornecedoresXMateriais
+          GET /localizador/produtos/:cod/fornecedores
         </span>
       </div>
     </section>

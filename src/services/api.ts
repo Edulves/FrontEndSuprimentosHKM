@@ -1,36 +1,20 @@
-import axios from 'axios';
-import type { Material, Fornecedor } from '../types/api';
+import suprimentosApi from './suprimentosApi';
+import type { FornecedorDoProduto, ProdutoNegociado } from '../types/api';
 
-// Configuração base do axios
-const api = axios.create({
-  baseURL: '/api',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+// Localizador de Fornecedores — API Python (backendpython), dados da tabela de negociações.
 
-// Serviço para buscar lista de materiais/produtos
-export const getMateriais = async (): Promise<Material[]> => {
-  try {
-    const response = await api.get<Material[]>('/FornecedoresXMateriais');
-    return response.data;
-  } catch (error) {
-    console.error('Erro ao buscar materiais:', error);
-    throw error;
-  }
+/** Busca produtos negociados por trecho do nome/código interno ou pelo cod_produto. */
+export const buscarProdutos = async (busca: string, limite = 20): Promise<ProdutoNegociado[]> => {
+  const { data } = await suprimentosApi.get<ProdutoNegociado[]>('/localizador/produtos', {
+    params: { busca, limite },
+  });
+  return data;
 };
 
-// Serviço para buscar fornecedores de um material específico
-export const getFornecedoresDeUmMaterial = async (codInternoProduto?: string): Promise<Fornecedor[]> => {
-  try {
-    const response = await api.get<Fornecedor[]>('/FornecedoresXMateriais/FornecedoresDeUmMaterial', {
-      params: codInternoProduto ? { CodInternoProduto: codInternoProduto } : undefined
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Erro ao buscar fornecedores:', error);
-    throw error;
-  }
+/** Fornecedores que já negociaram o produto. */
+export const getFornecedoresDoProduto = async (codProduto: number): Promise<FornecedorDoProduto[]> => {
+  const { data } = await suprimentosApi.get<FornecedorDoProduto[]>(
+    `/localizador/produtos/${codProduto}/fornecedores`
+  );
+  return data;
 };
-
-export default api;

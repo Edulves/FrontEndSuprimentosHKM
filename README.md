@@ -123,3 +123,16 @@ https://localhost:7286/FornecedoresXMateriais
 ## 📝 Licença
 
 Este projeto é proprietário da HKM Suprimentos.
+
+## 📊 Telas de acompanhamento (Solicitações, Cotações, Ordens de Compra e Compras)
+
+Rotas: `/solicitacoes`, `/cotacoes`, `/ordens-de-compra`, `/compras` (menu lateral → "Acompanhamento").
+
+Cada tela tem filtro de período/empresa, indicadores (KPIs), gráficos e a lista paginada com busca e filtro de situação.
+Os dados vêm da API Python (`../backendpython`), acessada pelo proxy `/suprimentos` do Vite
+(padrão `http://localhost:8000`; altere com `SUPRIMENTOS_API_URL` no `.env`).
+
+- Gráficos e KPIs: `GET /resumos/{solicitacoes|cotacoes|ordens_de_compras|compras}?dt_inicio=&dt_fim=&cod_empresa=`
+- Listas: `GET /{tabela}` com paginação e filtros (`campo__contem`, `campo__min`, `campo__max`, ...)
+
+Componentes reutilizáveis em `src/components/dashboard/` (gráficos com Recharts, KPIs, tabela paginada).

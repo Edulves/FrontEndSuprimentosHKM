@@ -1,4 +1,22 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
+
+const ItemMenu: React.FC<{ para: string; icone: string; rotulo: string }> = ({ para, icone, rotulo }) => (
+  <NavLink
+    to={para}
+    end
+    className={({ isActive }) =>
+      `flex items-center gap-3 px-3 py-2 rounded transition-colors font-title-sm text-title-sm ${
+        isActive
+          ? 'bg-primary-container text-on-primary shadow-sm'
+          : 'text-on-surface-variant hover:bg-surface-container-low'
+      }`
+    }
+  >
+    <span className="material-symbols-outlined text-[20px]">{icone}</span>
+    <span>{rotulo}</span>
+  </NavLink>
+);
 
 const Sidebar: React.FC = () => {
   return (
@@ -6,17 +24,18 @@ const Sidebar: React.FC = () => {
       <div className="flex flex-col">
         {/* Logo e Título */}
         <div className="h-16 px-4 flex items-center gap-2 bg-surface-container-lowest">
-          <img
-            alt="Vértice Supply Logo"
-            className="h-8 w-auto object-contain"
-            src="https://lh3.googleusercontent.com/aida/AEtjO1XPon_1KN3X79eS_kpQn67DqYfsxxUHPKrpuzmLWu7tikzQuyVyusAfggGbKZAiYqtL3dsxokSlmPsMy5Rpf2TsHlC8Qh2XyIpwv0f6WcEFAExihM01_e3mgmN5Hne-17GYe5sOniqdZg5RzxcUshPiKgiB2Gu3r1kqCEI4OYI7v0O9HtK2P9SvVRl9zusPT6rmv9d28X99HjO70gtJr0KNTzFm6bKqt8-s4dhzqpM5inj2rJuj7LK4pdgi"
-          />
-          <div className="flex flex-col">
+          <div
+            aria-hidden="true"
+            className="h-9 w-9 shrink-0 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shadow-sm"
+          >
+            <span className="material-symbols-outlined text-[22px]">inventory_2</span>
+          </div>
+          <div className="flex flex-col leading-tight">
             <span className="font-title-md text-title-md text-on-surface tracking-tight">
-              Vértice Supply
+              Suprimentos HKM
             </span>
             <span className="font-label-sm text-label-sm text-secondary uppercase">
-              Gestão ERP
+              Gestão de Compras
             </span>
           </div>
         </div>
@@ -28,17 +47,21 @@ const Sidebar: React.FC = () => {
           </span>
         </div>
 
-        {/* Menu de Navegação */}
         <nav className="flex flex-col gap-1 px-3">
-          <a
-            aria-current="page"
-            className="flex items-center gap-3 px-3 py-2 rounded transition-colors bg-primary-container text-on-primary font-title-sm shadow-sm"
-            href="#"
-          >
-            <span className="material-symbols-outlined text-[20px]">travel_explore</span>
-            <span>Localizar Fornecedores</span>
-          </a>
-          {/* Outros itens de menu podem ser adicionados aqui */}
+          <ItemMenu para="/" icone="travel_explore" rotulo="Localizar Fornecedores" />
+        </nav>
+
+        <div className="px-3 pt-4 pb-2">
+          <span className="px-2 font-label-sm text-label-sm uppercase text-outline tracking-wider">
+            Acompanhamento
+          </span>
+        </div>
+
+        <nav className="flex flex-col gap-1 px-3">
+          <ItemMenu para="/solicitacoes" icone="assignment" rotulo="Solicitações" />
+          <ItemMenu para="/cotacoes" icone="request_quote" rotulo="Cotações" />
+          <ItemMenu para="/ordens-de-compra" icone="shopping_cart_checkout" rotulo="Ordens de Compra" />
+          <ItemMenu para="/compras" icone="inventory" rotulo="Compras" />
         </nav>
       </div>
 

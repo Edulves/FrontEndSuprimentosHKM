@@ -1,0 +1,55 @@
+import axios from 'axios';
+import type {
+  FiltroResumo,
+  Pagina,
+  ResumoCompras,
+  ResumoCotacoes,
+  ResumoOrdens,
+  ResumoSolicitacoes,
+} from '../types/suprimentos';
+
+// API Python (backendpython) — proxy '/suprimentos' configurado no vite.config.ts
+const suprimentosApi = axios.create({
+  baseURL: '/suprimentos',
+  headers: { 'Content-Type': 'application/json' },
+});
+
+export type Tabela = 'solicitacoes' | 'cotacoes' | 'ordens_de_compras' | 'compras';
+
+type Params = Record<string, string | number | boolean | undefined | null>;
+
+const limpar = (params: Params) =>
+  Object.fromEntries(Object.entries(params).filter(([, v]) => v !== undefined && v !== null && v !== ''));
+
+export const getResumo = async <T>(tabela: Tabela, filtro: FiltroResumo): Promise<T> => {
+  const { data } = await suprimentosApi.get<T>(`/resumos/${tabela}`, { params: limpar({ ...filtro }) });
+  return data;
+};
+
+export const getResumoSolicitacoes = (f: FiltroResumo) => getResumo<ResumoSolicitacoes>('solicitacoes', f);
+export const getResumoCotacoes = (f: FiltroResumo) => getResumo<ResumoCotacoes>('cotacoes', f);
+export const getResumoOrdens = (f: FiltroResumo) => getResumo<ResumoOrdens>('ordens_de_compras', f);
+export const getResumoCompras = (f: FiltroResumo) => getResumo<ResumoCompras>('compras', f);
+
+let empresasCache: Promise<number[]> | null = null;
+
+/** Códigos de empresa existentes no banco (cacheado durante a sessão). */
+export const getEmpresas = (): Promise<number[]> => {
+  if (!empresasCache) {
+    empresasCache = suprimentosApi
+      .get<number[]>('/resumos/empresas')
+      .then((r) => r.data)
+      .catch((e) => {
+        empresasCache = null;
+        throw e;
+      });
+  }
+  return empresasCache;
+};
+
+export const listar = async <T>(tabela: Tabela, params: Params): Promise<Pagina<T>> => {
+  const { data } = await suprimentosApi.get<Pagina<T>>(`/${tabela}`, { params: limpar(params) });
+  return data;
+};
+
+export default suprimentosApi;
